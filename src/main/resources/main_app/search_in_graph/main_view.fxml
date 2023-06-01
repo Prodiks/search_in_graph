@@ -34,12 +34,12 @@
                                                 <Insets top="5.0" />
                                             </VBox.margin>
                                         </Label>
-                                        <TextField prefHeight="25.0" prefWidth="111.0" text="10">
+                                        <TextField fx:id="_countVerticlesField" onKeyTyped="#handleCountVecFiledChanged" prefHeight="25.0" prefWidth="111.0" text="10">
                                             <VBox.margin>
                                                 <Insets top="5.0" />
                                             </VBox.margin>
                                         </TextField>
-                                        <Slider blockIncrement="1.0" max="10.0" min="3.0" prefHeight="14.0" prefWidth="111.0" value="10.0">
+                                        <Slider fx:id="_slider" blockIncrement="1.0" max="10.0" min="3.0" prefHeight="14.0" prefWidth="111.0" value="10.0">
                                             <VBox.margin>
                                                 <Insets top="5.0" />
                                             </VBox.margin>
@@ -55,12 +55,12 @@
                                 <VBox alignment="CENTER">
                                     <children>
                                         <Separator prefHeight="0.0" prefWidth="111.0" />
-                                        <Button fx:id="search_button" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSearchButtonClick" text="Поиск" textAlignment="CENTER">
+                                        <Button fx:id="_searchButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleSearchButtonClick" text="Поиск" textAlignment="CENTER">
                                             <VBox.margin>
                                                 <Insets top="5.0" />
                                             </VBox.margin>
                                         </Button>
-                                        <Button fx:id="clear_button" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClearButtonClick" text="Очистить" textAlignment="CENTER">
+                                        <Button fx:id="_clearButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleClearButtonClick" text="Очистить" textAlignment="CENTER">
                                             <VBox.margin>
                                                 <Insets top="5.0" />
                                             </VBox.margin>
@@ -81,12 +81,12 @@
                     <children>
                         <VBox alignment="TOP_CENTER" layoutX="-30.0" layoutY="14.0" prefHeight="406.0" prefWidth="528.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <Label text="Матрица инцидентности">
+                                <Label text="Матрица весов">
                                     <VBox.margin>
                                         <Insets top="5.0" />
                                     </VBox.margin>
                                 </Label>
-                        <GridPane fx:id="matrix_grid_pane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="379.0" prefWidth="558.0">
+                        <GridPane fx:id="_matrixGridPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="379.0" prefWidth="558.0">
                           <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

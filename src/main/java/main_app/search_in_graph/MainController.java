@@ -1,5 +1,6 @@
 package main_app.search_in_graph;
 
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -8,80 +9,156 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.input.KeyEvent;
-public class MainController implements Initializable
-{
-//    MainController()
-//    {
-//
-//    }
-    private final int matrix_row_count = 10;
-    private final int matrix_column_count = 10;
+public class MainController implements Initializable {
 
-    private TextField[][] matrix_fields;
+    private final int _matrixRowCount = 10;
+    private final int _matrixColumnCount = 10;
 
-    @FXML
-    private Button search_button;
+    private final int _minVecCount = 3;
+    private Graph _gpaph;
+    private int _currentVertexCount;
+    private TextField[][] _matrixFields;
 
     @FXML
-    private Button clear_button;
+    private Button _searchButton;
 
     @FXML
-    private GridPane matrix_grid_pane;
+    private Button _clearButton;
+
+    @FXML
+    private GridPane _matrixGridPane;
+
+    @FXML
+    private Slider _slider;
+
+    @FXML
+    private TextField _countVerticlesField;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        matrix_fields = new TextField[matrix_row_count + 1][matrix_column_count + 1];
-        for (int i = 1; i <= matrix_row_count; i++) {
-            for (int j = 1; j <= matrix_column_count; j++) {
-                TextField text_field = new TextField();
-                text_field.setPrefSize(40, 30);
+        _matrixFields = new TextField[_matrixRowCount][_matrixColumnCount];
+        for (int i = 0; i < _matrixRowCount; i++) {
+            for (int j = 0; j < _matrixColumnCount; j++) {
+                TextField textField = new TextField();
+                textField.setMinSize(0, 0);
+                textField.setPrefSize(40, 40);
+                textField.setOnKeyTyped(event -> handleMatrixKeyTyped(event, textField));
+                if (i == j) {
+                    textField.setText("0");
+                    textField.setEditable(false);
+                }
 
-                matrix_fields[i][j] = text_field;
-                matrix_fields[i][j].setOnKeyTyped(event -> handleMatrixKeyTyped(event, text_field));
-
-                matrix_grid_pane.setMargin(text_field, new Insets(5, 5, 5, 5));
-                matrix_grid_pane.add(text_field, j, i);
+                _matrixFields[i][j] = textField;
+                _matrixGridPane.setMargin(textField, new Insets(3, 3, 3, 3));
+                _matrixGridPane.add(textField, j + 1, i + 1);
             }
         }
+
+        addListenerToSlider();
+    }
+
+    private void addListenerToSlider()
+    {
+        _slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            _currentVertexCount = Double.valueOf(_slider.getValue()).intValue();
+            _countVerticlesField.setText(String.valueOf(_currentVertexCount));
+
+            for (int i = 0; i < _matrixRowCount; i++) {
+                for (int j = 0; j < _matrixColumnCount; j++) {
+                    boolean isFieldDisable = (i >= _currentVertexCount) || (j >= _currentVertexCount);
+                    _matrixFields[i][j].setDisable(isFieldDisable);
+                }
+            }
+        });
     }
 
     private void handleMatrixKeyTyped(KeyEvent event, TextField textField)
     {
-        if(textField.getText().startsWith("-")) {
-            textField.setText("-1");
-            System.out.println("axaxa");
+        try {
+            if (Integer.parseInt(textField.getText()) < 0) {
+                System.out.println("Введено некорректное значение");
+                textField.setText("");
+            }
         }
-        System.out.println("heheh " + textField.getText());
-        for (int i = 1; i <= matrix_row_count; i++) {
-            int count_ones = 0;
-            for (int j = 1; j <= matrix_column_count; j++) {
-                if((matrix_fields[i][j].getText() == "1") || (matrix_fields[i][j].getText() == "-1")) {
-                    count_ones++;
-                }
+        catch(NumberFormatException ex) {
+            System.out.println(ex);
+            textField.setText("");
+        }
+    }
+
+    @FXML
+    private void handleCountVecFiledChanged()
+    {
+        try {
+            int newVecCount = Integer.parseInt(_countVerticlesField.getText());
+            if(newVecCount < _minVecCount) {
+                System.out.println("Значение меньше минимального");
+                _currentVertexCount = _minVecCount;
+            } else if (newVecCount > _matrixRowCount) {
+                System.out.println("Значение больше максимального");
+                _currentVertexCount = _matrixRowCount;
+            } else {
+                _currentVertexCount = newVecCount;
             }
-            if(count_ones == 2) {
-                for (int j = 1; j <= matrix_column_count; j++) {
-                    if((matrix_fields[i][j].getText() == "1") || (matrix_fields[i][j].getText() == "-1")) {
-                        continue;
-                    }
-                    matrix_fields[i][j].setText("0");
-                }
-            } else if(count_ones > 2) {
-                System.out.println("error");
-            }
+            _slider.setValue(_currentVertexCount);
+        }
+        catch(NumberFormatException ex) {
+            System.out.println(ex);
         }
     }
 
     @FXML
     private void handleSearchButtonClick()
     {
+        int[][] weightMatrix = getWeightMatrix();
+        if(weightMatrix == null) {
+            return;
+        }
+        _gpaph = new Graph(weightMatrix);
+
+
+    }
+
+    private int[][] getWeightMatrix()
+    {
+        int countZeroes = 0;
+        int[][] matrix = new int [_currentVertexCount][_currentVertexCount];
+        for (int i = 0; i < _currentVertexCount; i++) {
+            for (int j = 0; j < _currentVertexCount; j++) {
+                String matrixFiledValue = _matrixFields[i][j].getText().strip();
+                if(matrixFiledValue == "") {
+                    _matrixFields[i][j].setText(matrixFiledValue = "0");
+                }
+
+                try {
+                    matrix[i][j] = Integer.parseInt(matrixFiledValue);
+                    if(matrix[i][j] == 0) {
+                        countZeroes++;
+                    }
+                }
+                catch(NumberFormatException ex) {
+                    System.out.println("Ошибка в ячейке (" + i + "; " + j + ")");
+                    return null;
+                }
+            }
+        }
+
+        if(countZeroes == _currentVertexCount * _currentVertexCount) {
+            System.out.println("Пустая матрица");
+            return null;
+        } else {
+            return matrix;
+        }
     }
 
     @FXML
     private void handleClearButtonClick()
     {
-        for (int i = 1; i <= matrix_row_count; i++) {
-            for (int j = 1; j <= matrix_column_count; j++) {
-                matrix_fields[i][j].setText("");
+        for (int i = 0; i < _matrixRowCount; i++) {
+            for (int j = 0; j < _matrixColumnCount; j++) {
+                if(i != j) {
+                    _matrixFields[i][j].setText("");
+                }
             }
         }
     }
