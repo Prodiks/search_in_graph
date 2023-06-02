@@ -13,6 +13,8 @@ public class MainController implements Initializable {
     private final int _matrixRowCount = 10;
     private final int _matrixColumnCount = 10;
     private final int _minVecCount = 3;
+    private int _vecFrom;
+    private int _vecTo;
     private Graph _gpaph;
     private MessageHandler _messageHandler;
     private int _currentVertexCount;
@@ -30,6 +32,10 @@ public class MainController implements Initializable {
     private TextField _countVerticlesField;
     @FXML
     private Label _labelError;
+    @FXML
+    private TextField _vecFromField;
+    @FXML
+    private TextField _vecToField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,6 +56,7 @@ public class MainController implements Initializable {
                 _matrixGridPane.add(textField, j + 1, i + 1);
             }
         }
+        _currentVertexCount = 10;
 
         addListenerToSlider();
 
@@ -88,7 +95,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void handleCountVecFiledChanged()
+    private void handleCountVecFieldChanged()
     {
         try {
             int newVecCount = Integer.parseInt(_countVerticlesField.getText());
@@ -112,11 +119,32 @@ public class MainController implements Initializable {
     @FXML
     private void handleSearchButtonClick()
     {
+        _messageHandler.hideMessage();
+
         int[][] weightMatrix = getWeightMatrix();
         if(weightMatrix == null) {
             return;
         }
+
+        _vecTo = updateVecFieldValue(_vecFromField, MessageHandler.ErrorCodes.VEC_FROM_INVALID);
+        _vecFrom = updateVecFieldValue(_vecToField, MessageHandler.ErrorCodes.VEC_TO_INVALID);
+        if((_vecFrom == -1) || (_vecTo == -1)) {
+            return;
+        }
+
         _gpaph = new Graph(weightMatrix);
+    }
+    
+    @FXML
+    private void handleVecFromFieldTyped()
+    {
+        updateVecFieldValue(_vecFromField, MessageHandler.ErrorCodes.VEC_FROM_INVALID);
+    }
+
+    @FXML
+    private void handleVecToFieldTyped()
+    {
+        updateVecFieldValue(_vecToField, MessageHandler.ErrorCodes.VEC_TO_INVALID);
     }
 
     @FXML
@@ -134,17 +162,19 @@ public class MainController implements Initializable {
 
     private int[][] getWeightMatrix()
     {
+        _messageHandler.hideMessage();
+
         int countZeroes = 0;
         int[][] matrix = new int [_currentVertexCount][_currentVertexCount];
         for (int i = 0; i < _currentVertexCount; i++) {
             for (int j = 0; j < _currentVertexCount; j++) {
-                String matrixFiledValue = _matrixFields[i][j].getText().strip();
-                if(matrixFiledValue == "") {
-                    _matrixFields[i][j].setText(matrixFiledValue = "0");
+                String matrixFieldValue = _matrixFields[i][j].getText().strip();
+                if(matrixFieldValue == "") {
+                    _matrixFields[i][j].setText(matrixFieldValue = "0");
                 }
 
                 try {
-                    matrix[i][j] = Integer.parseInt(matrixFiledValue);
+                    matrix[i][j] = Integer.parseInt(matrixFieldValue);
                     if(matrix[i][j] == 0) {
                         countZeroes++;
                     }
@@ -160,8 +190,29 @@ public class MainController implements Initializable {
             _messageHandler.showError(MessageHandler.ErrorCodes.MATRIX_EMPTY);
             return null;
         } else {
-            _messageHandler.hideMessage();
             return matrix;
+        }
+    }
+
+    private int updateVecFieldValue(TextField textField, MessageHandler.ErrorCodes errorCode)
+    {
+        _messageHandler.hideMessage();
+
+        int newVec = -1;
+        try {
+            newVec = Integer.parseInt(textField.getText());
+        }
+        catch(NumberFormatException ex) {
+            textField.setText("");
+            _messageHandler.showError(errorCode);
+            return -1;
+        }
+
+        if((newVec > _currentVertexCount) || (newVec < 1)) {
+            _messageHandler.showError(errorCode);
+            return -1;
+        } else {
+            return newVec - 1;
         }
     }
 }

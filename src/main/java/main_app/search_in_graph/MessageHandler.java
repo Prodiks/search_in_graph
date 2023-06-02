@@ -10,7 +10,9 @@ public class MessageHandler
         NONE,
         INVALID_COUNT_VEC_VALUE,
         INVALID_MATRIX_VALUE,
-        MATRIX_EMPTY
+        MATRIX_EMPTY,
+        VEC_FROM_INVALID,
+        VEC_TO_INVALID
     }
 
     public enum MessageCodes {
@@ -34,6 +36,8 @@ public class MessageHandler
         _errorsDict.put(ErrorCodes.INVALID_COUNT_VEC_VALUE, "Введено неверное количество вершин");
         _errorsDict.put(ErrorCodes.INVALID_MATRIX_VALUE,    "Введен неверный вес");
         _errorsDict.put(ErrorCodes.MATRIX_EMPTY,            "Матрица не заполнена");
+        _errorsDict.put(ErrorCodes.VEC_FROM_INVALID,        "Некорректная начальная вершина");
+        _errorsDict.put(ErrorCodes.VEC_TO_INVALID,          "Некорректная конечная вершина");
 
         _messageDict = new HashMap();
         _messageDict.put(MessageCodes.NONE,           "Нет сообщения");
