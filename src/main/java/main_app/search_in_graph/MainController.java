@@ -1,6 +1,5 @@
 package main_app.search_in_graph;
 
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -13,26 +12,24 @@ public class MainController implements Initializable {
 
     private final int _matrixRowCount = 10;
     private final int _matrixColumnCount = 10;
-
     private final int _minVecCount = 3;
     private Graph _gpaph;
+    private MessageHandler _messageHandler;
     private int _currentVertexCount;
     private TextField[][] _matrixFields;
 
     @FXML
     private Button _searchButton;
-
     @FXML
     private Button _clearButton;
-
     @FXML
     private GridPane _matrixGridPane;
-
     @FXML
     private Slider _slider;
-
     @FXML
     private TextField _countVerticlesField;
+    @FXML
+    private Label _labelError;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -55,6 +52,9 @@ public class MainController implements Initializable {
         }
 
         addListenerToSlider();
+
+        _messageHandler = new MessageHandler(_labelError);
+        _messageHandler.showMessage(MessageHandler.MessageCodes.WAIT_INPUT);
     }
 
     private void addListenerToSlider()
@@ -74,14 +74,15 @@ public class MainController implements Initializable {
 
     private void handleMatrixKeyTyped(KeyEvent event, TextField textField)
     {
+        _messageHandler.hideMessage();
         try {
             if (Integer.parseInt(textField.getText()) < 0) {
-                System.out.println("Введено некорректное значение");
+                _messageHandler.showError(MessageHandler.ErrorCodes.INVALID_MATRIX_VALUE);
                 textField.setText("");
             }
         }
         catch(NumberFormatException ex) {
-            System.out.println(ex);
+            _messageHandler.showError(MessageHandler.ErrorCodes.INVALID_MATRIX_VALUE);
             textField.setText("");
         }
     }
@@ -92,12 +93,13 @@ public class MainController implements Initializable {
         try {
             int newVecCount = Integer.parseInt(_countVerticlesField.getText());
             if(newVecCount < _minVecCount) {
-                System.out.println("Значение меньше минимального");
+                _messageHandler.showError(MessageHandler.ErrorCodes.INVALID_COUNT_VEC_VALUE);
                 _currentVertexCount = _minVecCount;
             } else if (newVecCount > _matrixRowCount) {
-                System.out.println("Значение больше максимального");
+                _messageHandler.showError(MessageHandler.ErrorCodes.INVALID_COUNT_VEC_VALUE);
                 _currentVertexCount = _matrixRowCount;
             } else {
+                _messageHandler.hideMessage();
                 _currentVertexCount = newVecCount;
             }
             _slider.setValue(_currentVertexCount);
@@ -115,8 +117,19 @@ public class MainController implements Initializable {
             return;
         }
         _gpaph = new Graph(weightMatrix);
+    }
 
-
+    @FXML
+    private void handleClearButtonClick()
+    {
+        for (int i = 0; i < _matrixRowCount; i++) {
+            for (int j = 0; j < _matrixColumnCount; j++) {
+                if(i != j) {
+                    _matrixFields[i][j].setText("");
+                }
+            }
+        }
+        _messageHandler.hideMessage();
     }
 
     private int[][] getWeightMatrix()
@@ -137,29 +150,18 @@ public class MainController implements Initializable {
                     }
                 }
                 catch(NumberFormatException ex) {
-                    System.out.println("Ошибка в ячейке (" + i + "; " + j + ")");
+                    _messageHandler.showError(MessageHandler.ErrorCodes.INVALID_COUNT_VEC_VALUE);
                     return null;
                 }
             }
         }
 
         if(countZeroes == _currentVertexCount * _currentVertexCount) {
-            System.out.println("Пустая матрица");
+            _messageHandler.showError(MessageHandler.ErrorCodes.MATRIX_EMPTY);
             return null;
         } else {
+            _messageHandler.hideMessage();
             return matrix;
-        }
-    }
-
-    @FXML
-    private void handleClearButtonClick()
-    {
-        for (int i = 0; i < _matrixRowCount; i++) {
-            for (int j = 0; j < _matrixColumnCount; j++) {
-                if(i != j) {
-                    _matrixFields[i][j].setText("");
-                }
-            }
         }
     }
 }

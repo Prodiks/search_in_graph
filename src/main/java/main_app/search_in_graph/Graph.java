@@ -16,21 +16,17 @@ public class Graph
         }
     }
 
-    public void setWeight(int v1, int v2, int value)
-    {
-        _weights[v1][v2] = value;
-    }
-
-    public void setWeights(int[][] values)
+    public void print()
     {
         for(int i = 0; i < _countVerticles; i++) {
             for(int j = 0; j < _countVerticles; j++) {
-                _weights[i][j] = values[i][j];
+                System.out.print(_weights[i][j] + " ");
             }
+            System.out.println();
         }
     }
 
-//    public int[] search(int verFrom, int vecTo)
+//    public int[] search(int vecFrom, int vecTo)
 //    {
 //
 //    }

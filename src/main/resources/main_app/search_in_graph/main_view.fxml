@@ -246,7 +246,7 @@
                 </AnchorPane>
             </items>
         </SplitPane>
-        <Label text="Ошибка" textFill="#e15e5e">
+        <Label fx:id="_labelError" text="Ошибка" textFill="#e15e5e">
             <VBox.margin>
                 <Insets />
             </VBox.margin>
