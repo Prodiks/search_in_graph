@@ -1,12 +1,19 @@
 package main_app.search_in_graph;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.fxml.Initializable;
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.Vector;
+
 import javafx.scene.input.KeyEvent;
 public class MainController implements Initializable {
 
@@ -15,7 +22,7 @@ public class MainController implements Initializable {
     private final int _minVecCount = 3;
     private int _vecFrom;
     private int _vecTo;
-    private Graph _gpaph;
+    private Graph _graph;
     private MessageHandler _messageHandler;
     private int _currentVertexCount;
     private TextField[][] _matrixFields;
@@ -36,7 +43,8 @@ public class MainController implements Initializable {
     private TextField _vecFromField;
     @FXML
     private TextField _vecToField;
-
+    @FXML
+    private TextArea _pathArea;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         _matrixFields = new TextField[_matrixRowCount][_matrixColumnCount];
@@ -62,6 +70,8 @@ public class MainController implements Initializable {
 
         _messageHandler = new MessageHandler(_labelError);
         _messageHandler.showMessage(MessageHandler.MessageCodes.WAIT_INPUT);
+
+
     }
 
     private void addListenerToSlider()
@@ -132,9 +142,41 @@ public class MainController implements Initializable {
             return;
         }
 
-        _gpaph = new Graph(weightMatrix);
+        _graph = new Graph(weightMatrix);
+        Vector<Graph.PathNode> path = _graph.searchPath(_vecTo, _vecFrom);
+
+        updatePathArea(path, _graph.getPathWeight());
     }
-    
+
+    private void updatePathArea(Vector<Graph.PathNode> path, int pathWeight)
+    {
+        if(path == null) {
+            _pathArea.setText("Путь не обнаружен");
+            _messageHandler.showMessage(MessageHandler.MessageCodes.PATH_NOT_FOUND);
+            return;
+        }
+
+        _pathArea.setText("Вершины  | Вес\n");
+
+        for(int i = 0; i < path.size(); i++) {
+            String col1 = completeSpaces("e" + (path.get(i).getVertex() + 1), 16);
+            String col2 = path.get(i).getWeight() + " ед.";
+            String text = col1 + "| " + col2;
+            _pathArea.setText(_pathArea.getText() + text + "\n");
+        }
+
+        _pathArea.setText(_pathArea.getText() + "\nОбщий вес пути: " + pathWeight + " ед.");
+    }
+
+    private String completeSpaces(String str, int size)
+    {
+        while(str.length() < size) {
+            str += " ";
+        }
+
+        return str;
+    }
+
     @FXML
     private void handleVecFromFieldTyped()
     {
@@ -157,6 +199,10 @@ public class MainController implements Initializable {
                 }
             }
         }
+
+        _vecFromField.setText("");
+        _vecToField.setText("");
+        _pathArea.setText("" );
         _messageHandler.hideMessage();
     }
 

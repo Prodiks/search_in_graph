@@ -7,8 +7,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -16,15 +15,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox cache="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="793.0" spacing="5.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_app.search_in_graph.MainController">
+<VBox cache="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="440.0" prefWidth="900.0" spacing="5.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main_app.search_in_graph.MainController">
     <padding>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
     </padding>
     <children>
-        <SplitPane dividerPositions="0.17496807151979565, 0.8939974457215837" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="408.0" minWidth="785.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="408.0" prefWidth="785.0">
+        <SplitPane dividerPositions="0.15202702702702703, 0.7747747747747747" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="408.0" prefWidth="1050.0">
             <items>
-                <AnchorPane maxWidth="135.0" minHeight="-Infinity" minWidth="135.0" prefHeight="406.0" prefWidth="135.0">
+                <AnchorPane maxWidth="135.0" minHeight="-Infinity" minWidth="132.0" prefHeight="406.0" prefWidth="132.0">
                     <children>
                         <VBox prefHeight="406.0" prefWidth="110.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
                             <children>
@@ -59,7 +59,7 @@
                               <HBox prefHeight="24.0" prefWidth="129.0">
                                  <children>
                                     <Label text="Путь из" />
-                                    <TextField fx:id="_vecFromField" onKeyTyped="#handleVecFromFieldTyped" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="30.0">
+                                    <TextField fx:id="_vecFromField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" onKeyTyped="#handleVecFromFieldTyped" prefHeight="20.0" prefWidth="30.0">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
@@ -69,7 +69,7 @@
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField fx:id="_vecToField" onKeyTyped="#handleVecToFieldTyped" minHeight="0.0" minWidth="0.0" prefHeight="20.0" prefWidth="30.0">
+                                    <TextField fx:id="_vecToField" minHeight="0.0" minWidth="0.0" onKeyTyped="#handleVecToFieldTyped" prefHeight="20.0" prefWidth="30.0">
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
@@ -109,18 +109,18 @@
                         </VBox>
                     </children>
                 </AnchorPane>
-                <AnchorPane minHeight="-Infinity" minWidth="-Infinity">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="752.0">
                     <children>
-                        <VBox alignment="TOP_CENTER" layoutX="-30.0" layoutY="14.0" prefHeight="406.0" prefWidth="528.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="TOP_CENTER" layoutX="-30.0" layoutY="14.0" minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="698.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
                                 <Label text="Матрица весов">
                                     <VBox.margin>
                                         <Insets top="5.0" />
                                     </VBox.margin>
                                 </Label>
-                        <GridPane fx:id="_matrixGridPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="379.0" prefWidth="558.0">
+                        <GridPane fx:id="_matrixGridPane" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="379.0" prefWidth="558.0">
                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="70.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="75.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -255,23 +255,19 @@
                         </VBox>
                     </children>
                 </AnchorPane>
-                <AnchorPane layoutX="10.0" layoutY="10.0" maxWidth="80.0" minHeight="-Infinity" minWidth="80.0" prefWidth="80.0">
+                <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="200.0">
                     <children>
-                        <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="14.0" prefHeight="406.0" prefWidth="83.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="406.0" prefWidth="83.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
                                 <Label text="Результат">
                                     <VBox.margin>
                                         <Insets top="5.0" />
                                     </VBox.margin>
                                 </Label>
-                                <TableView maxWidth="80.0" minWidth="80.0" prefWidth="80.0">
-                                    <columns>
-                                        <TableColumn maxWidth="80.0" minWidth="80.0" prefWidth="-1.0" text="Путь" />
-                                    </columns>
-                                    <VBox.margin>
-                                        <Insets top="5.0" />
-                                    </VBox.margin>
-                                </TableView>
+                        <TextArea fx:id="_pathArea" editable="false" prefHeight="385.0" prefWidth="280.0">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font></TextArea>
                             </children>
                         </VBox>
                     </children>
