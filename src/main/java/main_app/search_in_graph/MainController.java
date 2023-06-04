@@ -1,19 +1,13 @@
 package main_app.search_in_graph;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.fxml.Initializable;
 import java.net.URL;
-import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.Vector;
-
 import javafx.scene.input.KeyEvent;
 public class MainController implements Initializable {
 
@@ -22,7 +16,7 @@ public class MainController implements Initializable {
     private final int _minVecCount = 3;
     private int _vecFrom;
     private int _vecTo;
-    private Graph _graph;
+    private WeightGraph _Weight_graph;
     private MessageHandler _messageHandler;
     private int _currentVertexCount;
     private TextField[][] _matrixFields;
@@ -142,13 +136,13 @@ public class MainController implements Initializable {
             return;
         }
 
-        _graph = new Graph(weightMatrix);
-        Vector<Graph.PathNode> path = _graph.searchPath(_vecTo, _vecFrom);
+        _Weight_graph = new WeightGraph(weightMatrix);
+        Vector<WeightGraph.PathNode> path = _Weight_graph.searchPath(_vecTo, _vecFrom);
 
-        updatePathArea(path, _graph.getPathWeight());
+        updatePathArea(path, _Weight_graph.getPathWeight());
     }
 
-    private void updatePathArea(Vector<Graph.PathNode> path, int pathWeight)
+    private void updatePathArea(Vector<WeightGraph.PathNode> path, int pathWeight)
     {
         if(path == null) {
             _pathArea.setText("Путь не обнаружен");

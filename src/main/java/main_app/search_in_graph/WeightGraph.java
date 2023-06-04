@@ -2,7 +2,7 @@ package main_app.search_in_graph;
 
 import java.util.*;
 
-public class Graph
+public class WeightGraph
 {
     class PathNode
     {
@@ -35,7 +35,7 @@ public class Graph
     Vector<PathNode> _path;
     int _pathWeight;
 
-    Graph(int[][] values)
+    WeightGraph(int[][] values)
     {
         _countVerticles = values.length;
         _weights = new int[_countVerticles][_countVerticles];
