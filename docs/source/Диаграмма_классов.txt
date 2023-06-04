@@ -1,0 +1,36 @@
+@startuml
+class WeightGraph {
+Инкапсулирует поля и\nметоды для работы с графом
++ Vector<PathNode> **searchPath**\n(int vecFrom, int vecTo)
++ int **getPathWeight**()
++ void **print**()
+}
+
+class PathNode {
+Представляет одну вершину пути
++ int **getVertex**()
++ int **getWeight**()
+}
+
+class MainApp {
+Точка входа в приложение
++ void start()
++ void main()
+}
+
+class MessageHandler {
+Представляет средства\nдля логгирования и\nвывода сообщений\nпользователю
++void **showError**\n(ErrorCodes errorCode)
++void **showMessage**\n(MessageCodes messageCode)
++void **hideMessage**()
+}
+
+class MainController {
+Управляет компонентами JavaFX.\nОпределяет обработчики событий
+}
+
+MainController *-- MessageHandler
+MainController *-- WeightGraph 
+WeightGraph *-- PathNode
+MainApp o-- MainController
+@enduml

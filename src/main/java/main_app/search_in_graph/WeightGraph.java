@@ -131,6 +131,7 @@ public class WeightGraph
         return true;
     }
 
+    // Ищет минимальную непосещенную вершину
     private int findMinVertex() {
         int minVertex = -1;
         for (int i = 0; i < _distances.length; i++) {
